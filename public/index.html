@@ -3,16 +3,26 @@
 
 <head>
   <title>War</title>
+  <link rel="stylesheet" type="text/css" href="/vendor/bootstrap/dist/css/bootstrap.min.css">
   <style>
-  canvas {
-    cursor: none;
+  canvas.shooting {
+    cursor: url('/img/crsr.png'), crosshair;
+  }
+  canvas.moving {
+    cursor: move;
   }
   </style>
+  <script type="text/javascript" src="socket.io/socket.io.js"></script>
 </head>
 
 <body>
-  <canvas id="viewport" width="900" height="600" style="width: 900px; height: 600px; border: 1px solid black; position: absolute; top:0px; left: 0px"></canvas>
+  <canvas id="viewport" width="900" height="600" class="shooting" style="width: 900px; height: 600px; border: 1px solid black; position: absolute; left: 0; top: 0"></canvas>
+  <div style="margin-top: 615px">
+  <button id="shoot" class="btn btn-default active">Shoot</button>
+  <button id="move" class="btn btn-default">Move</button>
+  </div>
+
 </body>
-<script src="js/game-logic.js"></script>
+<script src="js/bundle.js"></script>
 
 </html>
