@@ -1,10 +1,20 @@
 const router = require( 'express' ).Router();
 const path = require( 'path' );
 
+function onConnect(nsp) {
+}
+
 module.exports = function ( io ) {
   router.get( '/:gamename', ( req, res, next ) => {
+    io.emit('nsps', Object.keys(io.nsps).filter(nsp => {
+      return Object.keys(io.nsps[nsp].sockets).length === 1;
+    }));
 
     const nsp = io.of( '/' + req.params.gamename );
+
+    if (!nsp._events) {
+
+
     nsp.on( 'connection', socket => {
 
       function createTeam() {
@@ -25,7 +35,7 @@ module.exports = function ( io ) {
       const random = len => Math.floor( ( len - 30 ) * Math.random() );
 
       let _state = {
-        playerTeam: 'green',
+        // playerTeam: 'green',
         shotCanHit: true,
         pieceSize: 30,
         pieces: [
@@ -56,7 +66,7 @@ module.exports = function ( io ) {
       const team = createTeam();
 
 
-      nsp.on( 'connection', socket => {
+        console.log(socket.id);
         // Update everone that a new client is on the server
         nsp.to( socket.id ).emit( 'playerHere', Object.keys( nsp.sockets ).length > 1 );
 
@@ -94,30 +104,19 @@ module.exports = function ( io ) {
           socket.broadcast.emit( 'mousemove', pos );
         } );
 
-        // if ( Object.keys( nsp.sockets ).length === 2 && Object.keys( nsp.sockets ).filter( sck => nsp.sockets[ sck ].team ).length === 1 ) {
-        //   let withTeam = nsp.sockets[ Object.keys( nsp.sockets ).filter( sck => nsp.sockets[ sck ].team )[ 0 ] ];
-        //   if ( withTeam.team === 'green' ) {
-        //     nsp.to( socket.id ).emit( 'team', 'red' );
-        //     socket.team = 'red';
-        //   } else {
-        //     nsp.to( socket.id ).emit( 'team', 'green' );
-        //     socket.team = 'green';
-        //   }
-
-        // }
 
         socket.on( 'requestState', () => socket.emit( 'seed', _state ) );
         socket.on( 'shoot', shot => socket.broadcast.emit( 'shoot', shot ) );
         socket.on( 'explode', id => socket.broadcast.emit( 'explode', id ) );
         socket.on( 'showRange', id => socket.broadcast.emit( 'showRange', id ) );
-
-        // Update everone that a client left
-        socket.on( 'disconnect', () => socket.broadcast.emit( 'usercount', Object.keys( nsp.sockets ).length ) );
-      } );
+        socket.on('disconnect', () => {
+          console.log('disconnect');
+          nsp.emit('disconnected');
+        });
     } );
-res.sendFile( path.join( __dirname, '..', 'public', 'index.html' ) );
+  }
+    res.sendFile( path.join( __dirname, '..', 'public', 'index.html' ) );
   } );
-
   return router;
 };
 

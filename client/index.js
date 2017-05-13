@@ -10,6 +10,8 @@ import { gameover, explodePiece } from './boardEvents';
 import canvas from './canvasEvents';
 
 window.addEventListener( 'keydown', btnPress, false );
+const gamestatus = document.getElementById( 'gamestatus' );
+
 
 const othermouse = document.getElementById( 'othermouse' );
 
@@ -49,29 +51,24 @@ board.on( 'shoot', ( shot ) => socket.emit( 'shoot', shot ) );
 board.on( 'showRange', id => socket.emit( 'showRange', id ) );
 board.on( 'mousemove', pos => socket.emit( 'mousemove', pos ) );
 
-
-
 socket.on( 'gameover', gameover );
-
 socket.on( 'shoot', shot => board.drawShot( shot ) );
 socket.on( 'explode', explodePiece);
-
-const gamestatus = document.getElementById( 'gamestatus' );
-
 socket.on( 'countdown', countdown => {
-  gamestatus.innerText = `Game starting in ${countdown}`;
+  gamestatus.innerHTML = `Game starting in<br/>${countdown}`;
 } );
-
 socket.on( 'mousemove', pos => {
   othermouse.style.top = `${pos.y - 15}px`;
   othermouse.style.left = `${pos.x - 15}px`;
 } );
-
 socket.on( 'showRange', id => {
   pieces.getAll().forEach( pc => {
     if ( pc.id === id ) pc.showRange();
   } );
 } );
+socket.on('disconnected', () => {
+  alert('It looks like the other player got disconnected');
+});
 
 socket.on( 'seed', _state => {
   delete _state.playerTeam;
@@ -103,8 +100,6 @@ socket.on( 'playerHere', playerHere => {
 } );
 
 socket.on( 'state', _state => {
-  // Object.assign( state, _state );
-  // state.pieces = state.pieces.map( js => new Piece( js.id, js.type, js.team, { x: js.x, y: js.y }, js.health ) );
   pieces.moveAllTo( _state );
   state.action = 'shooting';
   board.render( true );
@@ -124,6 +119,3 @@ socket.on( 'team', team => {
     document.body.removeChild( document.getElementById( 'jumbo' ) );
   }
 } );
-
-socket.on( 'usercount', () => console.log( 'usercount' ) );
-

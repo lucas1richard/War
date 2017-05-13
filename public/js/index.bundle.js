@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 8);
+/******/ 	return __webpack_require__(__webpack_require__.s = 11);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -76,54 +76,12 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-var state = {
-  playerTeam: 'green',
-  shotCanHit: true,
-  pieceSize: 30,
-  pieces: [],
-  pieceToMove: null,
-  action: 'shooting',
-  shooting: false,
-  currentMousePosition: { x: 0, y: 0 },
-  lastMousePosition: { x: 0, y: 0 },
-  drawStart: { x: 0, y: 0 },
-  lastDistance: 0,
-  shotStart: {},
-  shotEnd: {},
-  shot: []
-};
 
-exports.default = state;
-
-/***/ }),
-/* 1 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-var canvas = exports.canvas = document.getElementById('viewport');
-var context = exports.context = canvas.getContext('2d');
-
-/***/ }),
-/* 2 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _state = __webpack_require__(0);
+var _state = __webpack_require__(1);
 
 var _state2 = _interopRequireDefault(_state);
 
-var _Piece = __webpack_require__(7);
+var _Piece = __webpack_require__(9);
 
 var _Piece2 = _interopRequireDefault(_Piece);
 
@@ -189,6 +147,48 @@ var pieces = {
 exports.default = pieces;
 
 /***/ }),
+/* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var state = {
+  playerTeam: 'green',
+  shotCanHit: true,
+  pieceSize: 30,
+  pieces: [],
+  pieceToMove: null,
+  action: 'shooting',
+  shooting: false,
+  currentMousePosition: { x: 0, y: 0 },
+  lastMousePosition: { x: 0, y: 0 },
+  drawStart: { x: 0, y: 0 },
+  lastDistance: 0,
+  shotStart: {},
+  shotEnd: {},
+  shot: []
+};
+
+exports.default = state;
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var canvas = exports.canvas = document.getElementById('viewport');
+var context = exports.context = canvas.getContext('2d');
+
+/***/ }),
 /* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -229,63 +229,20 @@ exports.default = window.player;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-var distance = exports.distance = function distance(_start, _end) {
-  return Math.sqrt(Math.pow(_end.x - _start.x, 2) + Math.pow(_end.y - _start.y, 2));
-};
 
-var droneRedImg = new Image();
-droneRedImg.src = '/img/drone-red.png';
-
-var droneGreenImg = new Image();
-droneGreenImg.src = '/img/drone-green.png';
-
-var tankRedImg = new Image();
-tankRedImg.src = '/img/tank-red.png';
-
-var tankGreenImg = new Image();
-tankGreenImg.src = '/img/tank-green.png';
-
-var scopeImg = new Image();
-scopeImg.src = '/img/scope.png';
-
-var sandImg = exports.sandImg = new Image();
-sandImg.src = '/img/sand.png';
-
-var explosionImg = exports.explosionImg = new Image();
-explosionImg.src = '/img/explosion.png';
-
-var pieceOptions = exports.pieceOptions = {
-  'drone-red': droneRedImg,
-  'drone-green': droneGreenImg,
-  'tank-green': tankGreenImg,
-  'tank-red': tankRedImg,
-  explosion: explosionImg
-};
-
-/***/ }),
-/* 5 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _EventEmitter = __webpack_require__(6);
+var _EventEmitter = __webpack_require__(8);
 
 var _EventEmitter2 = _interopRequireDefault(_EventEmitter);
 
-var _state = __webpack_require__(0);
+var _state = __webpack_require__(1);
 
 var _state2 = _interopRequireDefault(_state);
 
-var _utils = __webpack_require__(4);
+var _utils = __webpack_require__(5);
 
-var _canvas = __webpack_require__(1);
+var _canvas = __webpack_require__(2);
 
-var _pieces = __webpack_require__(2);
+var _pieces = __webpack_require__(0);
 
 var _pieces2 = _interopRequireDefault(_pieces);
 
@@ -368,7 +325,191 @@ board.drawShot = function (shot) {
 exports.default = board;
 
 /***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var distance = exports.distance = function distance(_start, _end) {
+  return Math.sqrt(Math.pow(_end.x - _start.x, 2) + Math.pow(_end.y - _start.y, 2));
+};
+
+var droneRedImg = new Image();
+droneRedImg.src = '/img/drone-red.png';
+
+var droneGreenImg = new Image();
+droneGreenImg.src = '/img/drone-green.png';
+
+var tankRedImg = new Image();
+tankRedImg.src = '/img/tank-red.png';
+
+var tankGreenImg = new Image();
+tankGreenImg.src = '/img/tank-green.png';
+
+var scopeImg = new Image();
+scopeImg.src = '/img/scope.png';
+
+var sandImg = exports.sandImg = new Image();
+sandImg.src = '/img/sand.png';
+
+var explosionImg = exports.explosionImg = new Image();
+explosionImg.src = '/img/explosion.png';
+
+var pieceOptions = exports.pieceOptions = {
+  'drone-red': droneRedImg,
+  'drone-green': droneGreenImg,
+  'tank-green': tankGreenImg,
+  'tank-red': tankRedImg,
+  explosion: explosionImg
+};
+
+/***/ }),
 /* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.explodePiece = exports.gameover = undefined;
+
+var _player = __webpack_require__(3);
+
+var _player2 = _interopRequireDefault(_player);
+
+var _pieces = __webpack_require__(0);
+
+var _pieces2 = _interopRequireDefault(_pieces);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var gameover = exports.gameover = function gameover(team) {
+  if (_player2.default.getTeam() === team) {
+    alert('You lose');
+    var gameStats = JSON.parse(localStorage.getItem('gameStats'));
+    gameStats.gamesPlayed++;
+    gameStats.gamesLost++;
+    localStorage.setItem('gameStats', JSON.stringify(gameStats));
+    window.location.href = window.location.origin;
+  } else {
+    alert('You win');
+    var _gameStats = JSON.parse(localStorage.getItem('gameStats'));
+    _gameStats.gamesPlayed++;
+    _gameStats.gamesWon++;
+    localStorage.setItem('gameStats', JSON.stringify(_gameStats));
+    window.location.href = window.location.origin;
+  }
+};
+
+var explodePiece = exports.explodePiece = function explodePiece(id) {
+  _pieces2.default.getAll().forEach(function (pc) {
+    if (pc.id === id) {
+      pc.isHit(true);
+    }
+  });
+};
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _canvas = __webpack_require__(2);
+
+var _state = __webpack_require__(1);
+
+var _state2 = _interopRequireDefault(_state);
+
+var _board = __webpack_require__(4);
+
+var _board2 = _interopRequireDefault(_board);
+
+var _pieces = __webpack_require__(0);
+
+var _pieces2 = _interopRequireDefault(_pieces);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+_canvas.canvas.addEventListener('mouseup', function () {
+  _state2.default.shooting = false;
+});
+
+_canvas.canvas.addEventListener('mousemove', function (ev) {
+  var mousePos = {
+    x: ev.pageX - this.offsetLeft,
+    y: ev.pageY - this.offsetTop
+  };
+
+  _board2.default.emit('mousemove', mousePos);
+
+  if (_state2.default.shooting) {
+    _state2.default.lastMousePosition = Object.assign({}, _state2.default.currentMousePosition);
+    _state2.default.currentMousePosition = mousePos;
+
+    _board2.default.shoot(_state2.default.lastMousePosition, _state2.default.currentMousePosition, _pieces2.default.getAll());
+  }
+});
+
+_canvas.canvas.addEventListener('mousedown', function (ev) {
+  _state2.default.shot = [];
+  var mousePos = {
+    x: ev.pageX - this.offsetLeft,
+    y: ev.pageY - this.offsetTop
+  };
+  if (_state2.default.action === 'shooting') {
+    _state2.default.shotCanHit = true;
+    _pieces2.default.getAll().forEach(function (pc) {
+      if (pc.mouseOn(mousePos)) {
+        _state2.default.shooting = true;
+      }
+    });
+  }
+
+  if (_state2.default.action === 'moving') {
+    _state2.default.moving = true;
+    if (!_state2.default.pieceToMove) {
+      _pieces2.default.getAll().forEach(function (pc) {
+        if (pc.mouseOn(mousePos)) {
+          _state2.default.pieceToMove = pc;
+          _state2.default.pieceToMove.showRange();
+        }
+      });
+    } else {
+      if (_state2.default.pieceToMove) {
+        _pieces2.default.findById(_state2.default.pieceToMove.id).moveTo(mousePos, function (err) {
+          if (!err) {
+            _state2.default.pieceToMove = null;
+          } else {
+            console.error(err);
+          }
+        });
+      }
+    }
+  }
+
+  _state2.default.currentMousePosition = Object.assign({}, mousePos);
+
+  _state2.default.drawStart = Object.assign({}, _state2.default.currentMousePosition);
+  _state2.default.lastDistance = 0;
+  _state2.default.shotStart = new Date();
+});
+
+exports.default = _canvas.canvas;
+
+/***/ }),
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -415,7 +556,7 @@ var EventEmitter = function () {
 exports.default = EventEmitter;
 
 /***/ }),
-/* 7 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -427,15 +568,15 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _state = __webpack_require__(0);
+var _state = __webpack_require__(1);
 
 var _state2 = _interopRequireDefault(_state);
 
-var _utils = __webpack_require__(4);
+var _utils = __webpack_require__(5);
 
-var _canvas = __webpack_require__(1);
+var _canvas = __webpack_require__(2);
 
-var _board = __webpack_require__(5);
+var _board = __webpack_require__(4);
 
 var _board2 = _interopRequireDefault(_board);
 
@@ -443,7 +584,7 @@ var _player = __webpack_require__(3);
 
 var _player2 = _interopRequireDefault(_player);
 
-var _pieces = __webpack_require__(2);
+var _pieces = __webpack_require__(0);
 
 var _pieces2 = _interopRequireDefault(_pieces);
 
@@ -497,7 +638,7 @@ var Piece = function () {
         this.explode();
         console.log('%cHit!', 'color: red; font-weight: bold;', this);
         this.health--;
-        console.log('%cHealth reduced to ' + this.health, 'color: blue; font-weight: bold');
+        // console.log( `%cHealth reduced to ${this.health}`, 'color: blue; font-weight: bold');
         _state2.default.shotCanHit = false;
         if (!explode) {
           _board2.default.emit('explode', this.id);
@@ -572,19 +713,20 @@ var Piece = function () {
 exports.default = Piece;
 
 /***/ }),
-/* 8 */
+/* 10 */,
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _state2 = __webpack_require__(0);
+var _state2 = __webpack_require__(1);
 
 var _state3 = _interopRequireDefault(_state2);
 
-var _utils = __webpack_require__(4);
+var _utils = __webpack_require__(5);
 
-var _board = __webpack_require__(5);
+var _board = __webpack_require__(4);
 
 var _board2 = _interopRequireDefault(_board);
 
@@ -592,21 +734,22 @@ var _player = __webpack_require__(3);
 
 var _player2 = _interopRequireDefault(_player);
 
-var _pieces = __webpack_require__(2);
+var _pieces = __webpack_require__(0);
 
 var _pieces2 = _interopRequireDefault(_pieces);
 
-var _canvas = __webpack_require__(1);
+var _canvas = __webpack_require__(2);
 
-var _boardEvents = __webpack_require__(9);
+var _boardEvents = __webpack_require__(6);
 
-var _canvasEvents = __webpack_require__(10);
+var _canvasEvents = __webpack_require__(7);
 
 var _canvasEvents2 = _interopRequireDefault(_canvasEvents);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 window.addEventListener('keydown', btnPress, false);
+var gamestatus = document.getElementById('gamestatus');
 
 var othermouse = document.getElementById('othermouse');
 
@@ -658,27 +801,24 @@ _board2.default.on('mousemove', function (pos) {
 });
 
 socket.on('gameover', _boardEvents.gameover);
-
 socket.on('shoot', function (shot) {
   return _board2.default.drawShot(shot);
 });
 socket.on('explode', _boardEvents.explodePiece);
-
-var gamestatus = document.getElementById('gamestatus');
-
 socket.on('countdown', function (countdown) {
-  gamestatus.innerText = 'Game starting in ' + countdown;
+  gamestatus.innerHTML = 'Game starting in<br/>' + countdown;
 });
-
 socket.on('mousemove', function (pos) {
   othermouse.style.top = pos.y - 15 + 'px';
   othermouse.style.left = pos.x - 15 + 'px';
 });
-
 socket.on('showRange', function (id) {
   _pieces2.default.getAll().forEach(function (pc) {
     if (pc.id === id) pc.showRange();
   });
+});
+socket.on('disconnected', function () {
+  alert('It looks like the other player got disconnected');
 });
 
 socket.on('seed', function (_state) {
@@ -704,8 +844,6 @@ socket.on('playerHere', function (playerHere) {
 });
 
 socket.on('state', function (_state) {
-  // Object.assign( state, _state );
-  // state.pieces = state.pieces.map( js => new Piece( js.id, js.type, js.team, { x: js.x, y: js.y }, js.health ) );
   _pieces2.default.moveAllTo(_state);
   _state3.default.action = 'shooting';
   _board2.default.render(true);
@@ -726,152 +864,6 @@ socket.on('team', function (team) {
   }
 });
 
-socket.on('usercount', function () {
-  return console.log('usercount');
-});
-
-/***/ }),
-/* 9 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.explodePiece = exports.gameover = undefined;
-
-var _player = __webpack_require__(3);
-
-var _player2 = _interopRequireDefault(_player);
-
-var _pieces = __webpack_require__(2);
-
-var _pieces2 = _interopRequireDefault(_pieces);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var gameover = exports.gameover = function gameover(team) {
-  if (_player2.default.getTeam() === team) {
-    alert('You lose');
-    var gameStats = JSON.parse(localStorage.getItem('gameStats'));
-    gameStats.gamesPlayed++;
-    gameStats.gamesLost++;
-    localStorage.setItem('gameStats', JSON.stringify(gameStats));
-  } else {
-    alert('You win');
-    var _gameStats = JSON.parse(localStorage.getItem('gameStats'));
-    _gameStats.gamesPlayed++;
-    _gameStats.gamesWon++;
-    localStorage.setItem('gameStats', JSON.stringify(_gameStats));
-  }
-};
-
-var explodePiece = exports.explodePiece = function explodePiece(id) {
-  _pieces2.default.getAll().forEach(function (pc) {
-    if (pc.id === id) {
-      console.log(pc);
-      pc.isHit(true);
-    }
-  });
-};
-
-/***/ }),
-/* 10 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _canvas = __webpack_require__(1);
-
-var _state = __webpack_require__(0);
-
-var _state2 = _interopRequireDefault(_state);
-
-var _board = __webpack_require__(5);
-
-var _board2 = _interopRequireDefault(_board);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-_canvas.canvas.addEventListener('mouseup', function () {
-  _state2.default.shooting = false;
-});
-
-_canvas.canvas.addEventListener('mousemove', function (ev) {
-  var mousePos = {
-    x: ev.pageX - this.offsetLeft,
-    y: ev.pageY - this.offsetTop
-  };
-
-  _board2.default.emit('mousemove', mousePos);
-
-  if (_state2.default.shooting) {
-    _state2.default.lastMousePosition = Object.assign({}, _state2.default.currentMousePosition);
-    _state2.default.currentMousePosition = mousePos;
-
-    _board2.default.shoot(_state2.default.lastMousePosition, _state2.default.currentMousePosition, pieces.getAll());
-  } else {
-    // pieces.forEach( pc => {
-    //   if ( distance( pc, mousePos ) < 30 ) {
-    //     placeScope( pc );
-    //   }
-    // } );
-  }
-});
-
-_canvas.canvas.addEventListener('mousedown', function (ev) {
-  _state2.default.shot = [];
-  var mousePos = {
-    x: ev.pageX - this.offsetLeft,
-    y: ev.pageY - this.offsetTop
-  };
-  if (_state2.default.action === 'shooting') {
-    _state2.default.shotCanHit = true;
-    pieces.getAll().forEach(function (pc) {
-      if (pc.mouseOn(mousePos)) {
-        _state2.default.shooting = true;
-      }
-    });
-  }
-
-  if (_state2.default.action === 'moving') {
-    _state2.default.moving = true;
-    if (!_state2.default.pieceToMove) {
-      pieces.getAll().forEach(function (pc) {
-        if (pc.mouseOn(mousePos)) {
-          _state2.default.pieceToMove = pc;
-          _state2.default.pieceToMove.showRange();
-        }
-      });
-    } else {
-      if (_state2.default.pieceToMove) {
-        pieces.findById(_state2.default.pieceToMove.id).moveTo(mousePos, function (err) {
-          if (!err) {
-            _state2.default.pieceToMove = null;
-          } else {
-            console.error(err);
-          }
-        });
-      }
-    }
-  }
-
-  _state2.default.currentMousePosition = Object.assign({}, mousePos);
-
-  _state2.default.drawStart = Object.assign({}, _state2.default.currentMousePosition);
-  _state2.default.lastDistance = 0;
-  _state2.default.shotStart = new Date();
-});
-
-exports.default = _canvas.canvas;
-
 /***/ })
 /******/ ]);
-//# sourceMappingURL=bundle.js.map
+//# sourceMappingURL=index.bundle.js.map

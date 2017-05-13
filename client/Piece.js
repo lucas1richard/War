@@ -46,7 +46,7 @@ class Piece {
       this.explode();
       console.log( '%cHit!', 'color: red; font-weight: bold;', this );
       this.health--;
-      console.log( `%cHealth reduced to ${this.health}`, 'color: blue; font-weight: bold');
+      // console.log( `%cHealth reduced to ${this.health}`, 'color: blue; font-weight: bold');
       state.shotCanHit = false;
       if ( !explode ) {
         board.emit( 'explode', this.id );

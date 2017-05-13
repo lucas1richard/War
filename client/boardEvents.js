@@ -8,19 +8,20 @@ export const gameover = team => {
     gameStats.gamesPlayed++;
     gameStats.gamesLost++;
     localStorage.setItem( 'gameStats', JSON.stringify( gameStats ) );
+    window.location.href = window.location.origin;
   } else {
     alert( 'You win' );
     let gameStats = JSON.parse( localStorage.getItem( 'gameStats' ) );
     gameStats.gamesPlayed++;
     gameStats.gamesWon++;
     localStorage.setItem( 'gameStats', JSON.stringify( gameStats ) );
+    window.location.href = window.location.origin;
   }
 };
 
 export const explodePiece = id => {
   pieces.getAll().forEach( pc => {
     if ( pc.id === id ) {
-      console.log( pc );
       pc.isHit( true );
     }
   } );

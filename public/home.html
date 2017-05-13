@@ -5,25 +5,27 @@
   <title>War</title>
   <link rel="stylesheet" type="text/css" href="/vendor/bootstrap/dist/css/bootstrap.min.css">
   <script type="text/javascript" src="socket.io/socket.io.js"></script>
+  <script type="text/javascript" src="/js/home.bundle.js" defer></script>
 </head>
 
 <body>
   <div class="container">
-    <h1>War</h1> Join a game:
-
-    <ul id="gamelist"></ul>
+    <h1>War</h1>
+    <div class="well">
+      <form id="gameform">
+        <div class="form-group">
+          <input class="form-control" type="text" id="gamename" />
+          <small id="errorMsg" style="display: none; color: red">Please use letters only</small>
+        </div>
+        <button class="btn btn-primary">Make a Game</button>
+      </form>
+    </div>
+    <div class="well" id="games">
+      Join a game:
+      <ul id="gamelist"></ul>
+    </div>
+    <div id="stats"></div>
   </div>
 </body>
-<script type="text/javascript">
-let socket = io(window.location.orogin);
-const gamelist = document.getElementById('gamelist');
-
-socket.on('nsps', nsps => {
-  gamelist.innerHTML = '';
-  nsps.forEach(gm => {
-    gamelist.innerHTML += `<li><a href="${gm}">${gm}</a></li>`;
-  });
-});
-</script>
 
 </html>

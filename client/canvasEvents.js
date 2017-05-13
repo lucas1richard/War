@@ -1,6 +1,7 @@
 import { canvas } from './canvas';
 import state from './state';
 import board from './board';
+import pieces from './pieces';
 
 canvas.addEventListener( 'mouseup', function () {
   state.shooting = false;
@@ -19,12 +20,6 @@ canvas.addEventListener( 'mousemove', function ( ev ) {
     state.currentMousePosition = mousePos;
 
     board.shoot( state.lastMousePosition, state.currentMousePosition, pieces.getAll() );
-  } else {
-    // pieces.forEach( pc => {
-    //   if ( distance( pc, mousePos ) < 30 ) {
-    //     placeScope( pc );
-    //   }
-    // } );
   }
 } );
 
