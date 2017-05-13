@@ -2,6 +2,7 @@ import EventEmitter from './EventEmitter';
 import state from './state';
 import { sandImg, distance } from './utils';
 import { canvas, context } from './canvas';
+import pieces from './pieces';
 
 let { pieceSize } = state;
 
@@ -19,7 +20,7 @@ board.render = function ( shouldBroadcast ) {
   context.globalAlpha = 0.6;
   context.drawImage( sandImg, 0, 0, 900, 600 );
   context.restore();
-  state.pieces.forEach( pc => pc.render() );
+  pieces.renderAll();
   state.shot.forEach( shot => board.drawShot( shot ) );
   if ( !shouldBroadcast ) board.emit( 'render', state );
 };

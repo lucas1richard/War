@@ -12,16 +12,17 @@ app.use( '/', ( req, res, next ) => {
   res.sendFile( path.join( __dirname, '..', 'public', 'index.html' ) );
 } );
 
+
 const server = app.listen( 3000, () => console.log( `Listening on port 3000` ) );
 
 function createTeam() {
   let count = 0;
-  return function() {
-    if (count === 1) {
+  return function () {
+    if ( count === 1 ) {
       count++;
       return 'green';
     }
-    if (count === 2) {
+    if ( count === 2 ) {
       count++;
       return 'red';
     }
@@ -29,15 +30,21 @@ function createTeam() {
   };
 }
 
+const random = len => Math.floor( ( len - 30 ) * Math.random() );
+
 let _state = {
   playerTeam: 'green',
   shotCanHit: true,
   pieceSize: 30,
   pieces: [
-    { id: 1, type: 'tank', team: 'green', x: 204, y: 129, health: 3, range: 100, img: '/img/tank-green', icon: {} },
-    { id: 2, type: 'drone', team: 'green', x: 678, y: 40, health: 2, range: 200, img: '/img/drone-green', icon: {} },
-    { id: 3, type: 'tank', team: 'red', x: 409, y: 112, health: 3, range: 100, img: '/img/tank-red', icon: {} },
-    { id: 4, type: 'drone', team: 'red', x: 832, y: 541, health: 2, range: 200, img: '/img/drone-red', icon: {} }
+    { id: 1, type: 'tank', team: 'green', x: random( 900 ), y: random( 600 ) },
+    { id: 2, type: 'drone', team: 'green', x: random( 900 ), y: random( 600 ) },
+    { id: 3, type: 'tank', team: 'red', x: random( 900 ), y: random( 600 ) },
+    { id: 4, type: 'drone', team: 'red', x: random( 900 ), y: random( 600 ) },
+    { id: 5, type: 'tank', team: 'green', x: random( 900 ), y: random( 600 ) },
+    { id: 6, type: 'drone', team: 'green', x: random( 900 ), y: random( 600 ) },
+    { id: 7, type: 'tank', team: 'red', x: random( 900 ), y: random( 600 ) },
+    { id: 8, type: 'drone', team: 'red', x: random( 900 ), y: random( 600 ) },
   ],
   pieceToMove: null,
   action: 'shooting',
@@ -51,27 +58,53 @@ let _state = {
 };
 
 const team = createTeam();
-console.log(team());
+console.log( team() );
 
 ( io => {
-  let toDraw = [];
 
   io.on( 'connection', socket => {
-    console.log(socket.id);
     // Update everone that a new client is on the server
     io.emit( 'usercount', Object.keys( io.sockets.sockets ).length );
 
     let mTeam = team();
-    console.log(mTeam);
+    socket.team = mTeam;
 
     io.to( socket.id ).emit( 'playerHere', Object.keys( io.sockets.sockets ).length > 1 );
     io.to( socket.id ).emit( 'team', mTeam );
 
     socket.on( 'state', state => {
-      Object.assign( _state, state );
-      socket.broadcast.emit( 'state', _state );
+      socket.broadcast.emit( 'state', Array.from( state ) );
     } );
 
+    socket.on( 'gameover', losingteam => io.emit( 'gameover', losingteam ) );
+
+    if ( Object.keys( io.sockets.sockets ).length >= 2 && !Object.keys( io.sockets.sockets ).filter( sck => io.sockets.sockets[ sck ].team ).length ) {
+      console.log( 'aiyaaa' );
+      let tm = createTeam();
+      tm();
+      Object.keys( io.sockets.sockets ).forEach( sck => {
+        let tmpTm = tm();
+        io.to( sck ).emit( 'team', tmpTm );
+        io.sockets.sockets[ sck ].team = tmpTm;
+      } );
+    }
+
+    socket.on( 'mousemove', pos => {
+      // console.log(pos);
+      socket.broadcast.emit( 'mousemove', pos );
+    } );
+
+    if ( Object.keys( io.sockets.sockets ).length === 2 && Object.keys( io.sockets.sockets ).filter( sck => io.sockets.sockets[ sck ].team ).length === 1 ) {
+      let withTeam = io.sockets.sockets[ Object.keys( io.sockets.sockets ).filter( sck => io.sockets.sockets[ sck ].team )[ 0 ] ];
+      if ( withTeam.team === 'green' ) {
+        io.to( socket.id ).emit( 'team', 'red' );
+        socket.team = 'red';
+      } else {
+        io.to( socket.id ).emit( 'team', 'green' );
+        socket.team = 'green';
+      }
+
+    }
 
     socket.on( 'requestState', () => socket.emit( 'seed', _state ) );
     socket.on( 'shoot', shot => socket.broadcast.emit( 'shoot', shot ) );
@@ -80,7 +113,6 @@ console.log(team());
 
     // Clear the memory and inform all clients to clear the board
     socket.on( 'clear', () => {
-      toDraw = [];
       socket.broadcast.emit( 'clear' );
     } );
 

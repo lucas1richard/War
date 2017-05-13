@@ -3,6 +3,7 @@ import { distance, pieceOptions, explosionImg } from './utils';
 import { context } from './canvas';
 import board from './board';
 import player from './player';
+import pieces from './pieces';
 
 const { pieceSize } = state;
 
@@ -40,14 +41,14 @@ class Piece {
     context.fill();
   }
 
-  isHit( notBroadcast ) {
-    if ( state.shotCanHit && this.team !== player.getTeam() ) {
+  isHit( explode ) {
+    if ( (state.shotCanHit && this.team !== player.getTeam()) || explode ) {
+      this.explode();
       console.log( '%cHit!', 'color: red; font-weight: bold;', this );
       this.health--;
       console.log( `%cHealth reduced to ${this.health}`, 'color: blue; font-weight: bold');
       state.shotCanHit = false;
-      this.explode( notBroadcast );
-      if ( !notBroadcast ) {
+      if ( !explode ) {
         board.emit( 'explode', this.id );
       }
     }
@@ -63,8 +64,11 @@ class Piece {
         this.isExploding = false;
         board.render();
       } else {
-        state.pieces = state.pieces.filter( pc => pc.health );
+        pieces.clearTheDead();
         board.render();
+      }
+      if ( !pieces.checkSurvivors() ) {
+        board.emit('gameover', player.getTeam());
       }
     }, 500 );
   }
@@ -93,8 +97,8 @@ class Piece {
       this.y = y - pieceSize / 2;
       this.isMoving = false;
       board.render();
-      fn();
-    } else {
+      if (fn) fn();
+    } else if (fn) {
       fn( `Position is too far: ${dist}` );
     }
   }
