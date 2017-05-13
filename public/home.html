@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>War</title>
+  <link rel="stylesheet" type="text/css" href="/vendor/bootstrap/dist/css/bootstrap.min.css">
+  <script type="text/javascript" src="socket.io/socket.io.js"></script>
+</head>
+
+<body>
+  <div class="container">
+    <h1>War</h1> Join a game:
+
+    <ul id="gamelist"></ul>
+  </div>
+</body>
+<script type="text/javascript">
+let socket = io(window.location.orogin);
+const gamelist = document.getElementById('gamelist');
+
+socket.on('nsps', nsps => {
+  gamelist.innerHTML = '';
+  nsps.forEach(gm => {
+    gamelist.innerHTML += `<li><a href="${gm}">${gm}</a></li>`;
+  });
+});
+</script>
+
+</html>

@@ -127,7 +127,7 @@ var _Piece = __webpack_require__(7);
 
 var _Piece2 = _interopRequireDefault(_Piece);
 
-var _player = __webpack_require__(5);
+var _player = __webpack_require__(3);
 
 var _player2 = _interopRequireDefault(_player);
 
@@ -198,6 +198,37 @@ exports.default = pieces;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+window.player = {
+  team: null,
+  getTeam: function getTeam() {
+    return this.team;
+  },
+  setTeam: function setTeam(team) {
+    if (!this.team) {
+      this.team = team;
+      var footer = document.getElementById('footer');
+      footer.innerText = team.charAt(0).toUpperCase() + team.slice(1) + ' Team';
+      footer.style.color = team;
+      footer.style.fontWeight = 'bold';
+      return this.team;
+    } else {
+      console.error('Team is already set to ' + this.team);
+    }
+  }
+};
+
+exports.default = window.player;
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 var distance = exports.distance = function distance(_start, _end) {
   return Math.sqrt(Math.pow(_end.x - _start.x, 2) + Math.pow(_end.y - _start.y, 2));
 };
@@ -232,7 +263,7 @@ var pieceOptions = exports.pieceOptions = {
 };
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -250,7 +281,7 @@ var _state = __webpack_require__(0);
 
 var _state2 = _interopRequireDefault(_state);
 
-var _utils = __webpack_require__(3);
+var _utils = __webpack_require__(4);
 
 var _canvas = __webpack_require__(1);
 
@@ -337,37 +368,6 @@ board.drawShot = function (shot) {
 exports.default = board;
 
 /***/ }),
-/* 5 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-window.player = {
-  team: null,
-  getTeam: function getTeam() {
-    return this.team;
-  },
-  setTeam: function setTeam(team) {
-    if (!this.team) {
-      this.team = team;
-      var footer = document.getElementById('footer');
-      footer.innerText = team.charAt(0).toUpperCase() + team.slice(1) + ' Team';
-      footer.style.color = team;
-      footer.style.fontWeight = 'bold';
-      return this.team;
-    } else {
-      console.error('Team is already set to ' + this.team);
-    }
-  }
-};
-
-exports.default = window.player;
-
-/***/ }),
 /* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -431,15 +431,15 @@ var _state = __webpack_require__(0);
 
 var _state2 = _interopRequireDefault(_state);
 
-var _utils = __webpack_require__(3);
+var _utils = __webpack_require__(4);
 
 var _canvas = __webpack_require__(1);
 
-var _board = __webpack_require__(4);
+var _board = __webpack_require__(5);
 
 var _board2 = _interopRequireDefault(_board);
 
-var _player = __webpack_require__(5);
+var _player = __webpack_require__(3);
 
 var _player2 = _interopRequireDefault(_player);
 
@@ -582,13 +582,13 @@ var _state2 = __webpack_require__(0);
 
 var _state3 = _interopRequireDefault(_state2);
 
-var _utils = __webpack_require__(3);
+var _utils = __webpack_require__(4);
 
-var _board2 = __webpack_require__(4);
+var _board = __webpack_require__(5);
 
-var _board3 = _interopRequireDefault(_board2);
+var _board2 = _interopRequireDefault(_board);
 
-var _player = __webpack_require__(5);
+var _player = __webpack_require__(3);
 
 var _player2 = _interopRequireDefault(_player);
 
@@ -598,9 +598,13 @@ var _pieces2 = _interopRequireDefault(_pieces);
 
 var _canvas = __webpack_require__(1);
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+var _boardEvents = __webpack_require__(9);
 
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+var _canvasEvents = __webpack_require__(10);
+
+var _canvasEvents2 = _interopRequireDefault(_canvasEvents);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 window.addEventListener('keydown', btnPress, false);
 
@@ -608,172 +612,67 @@ var othermouse = document.getElementById('othermouse');
 
 function btnPress(ev) {
   if (ev.keyCode === 32) {
-    if (_canvas.canvas.className === 'shooting') {
-      _canvas.canvas.className = 'moving';
+    if (_canvasEvents2.default.className === 'shooting') {
+      _canvasEvents2.default.className = 'moving';
       _state3.default.action = 'moving';
     } else {
-      _canvas.canvas.className = 'shooting';
+      _canvasEvents2.default.className = 'shooting';
       _state3.default.action = 'shooting';
     }
   }
 }
 
-function resize() {
-  // Unscale the canvas (if it was previously scaled)
-  _canvas.context.setTransform(1, 0, 0, 1, 0, 0);
+var gameStats = localStorage.getItem('gameStats');
 
-  // The device pixel ratio is the multiplier between CSS pixels
-  // and device pixels
-  var pixelRatio = window.devicePixelRatio || 1;
-
-  // Allocate backing store large enough to give us a 1:1 device pixel
-  // to canvas pixel ratio.
-  var w = _canvas.canvas.clientWidth * pixelRatio,
-      h = _canvas.canvas.clientHeight * pixelRatio;
-  if (w !== _canvas.canvas.width || h !== _canvas.canvas.height) {
-    // Resizing the canvas destroys the current content.
-    // So, save it...
-    var imgData = _canvas.context.getImageData(0, 0, _canvas.canvas.width, _canvas.canvas.height);
-
-    _canvas.canvas.width = w;_canvas.canvas.height = h;
-
-    // ...then restore it.
-    _canvas.context.putImageData(imgData, 0, 0);
-  }
-
-  // Scale the canvas' internal coordinate system by the device pixel
-  // ratio to ensure that 1 canvas unit = 1 css pixel, even though our
-  // backing store is larger.
-  _canvas.context.scale(pixelRatio, pixelRatio);
-
-  // context.lineWidth = 5;
-  _canvas.context.lineJoin = 'round';
-  _canvas.context.lineCap = 'round';
+if (gameStats) {
+  console.log(JSON.parse(gameStats));
+} else {
+  var initialStats = {
+    gamesPlayed: 0,
+    gamesWon: 0,
+    gamesLost: 0
+  };
+  localStorage.setItem('gameStats', JSON.stringify(initialStats));
+  console.log(initialStats);
 }
 
-resize();
+var socket = io(window.location.href);
 
-_canvas.canvas.addEventListener('mouseup', function () {
-  _state3.default.shooting = false;
+_board2.default.on('explode', function (id) {
+  return socket.emit('explode', id);
 });
-
-_canvas.canvas.addEventListener('mousemove', function (ev) {
-  var mousePos = {
-    x: ev.pageX - this.offsetLeft,
-    y: ev.pageY - this.offsetTop
-  };
-
-  _board3.default.emit('mousemove', mousePos);
-
-  if (_state3.default.shooting) {
-    _state3.default.lastMousePosition = Object.assign({}, _state3.default.currentMousePosition);
-    _state3.default.currentMousePosition = mousePos;
-
-    _board3.default.shoot(_state3.default.lastMousePosition, _state3.default.currentMousePosition, _pieces2.default.getAll());
-  } else {
-    // pieces.forEach( pc => {
-    //   if ( distance( pc, mousePos ) < 30 ) {
-    //     placeScope( pc );
-    //   }
-    // } );
-  }
+_board2.default.on('gameover', function (team) {
+  return socket.emit('gameover', team);
 });
-
-_canvas.canvas.addEventListener('mousedown', function (ev) {
-  _state3.default.shot = [];
-  var mousePos = {
-    x: ev.pageX - this.offsetLeft,
-    y: ev.pageY - this.offsetTop
-  };
-  if (_state3.default.action === 'shooting') {
-    _state3.default.shotCanHit = true;
-    _pieces2.default.getAll().forEach(function (pc) {
-      if (pc.mouseOn(mousePos)) {
-        _state3.default.shooting = true;
-      }
-    });
-  }
-
-  if (_state3.default.action === 'moving') {
-    _state3.default.moving = true;
-    if (!_state3.default.pieceToMove) {
-      _pieces2.default.getAll().forEach(function (pc) {
-        if (pc.mouseOn(mousePos)) {
-          _state3.default.pieceToMove = pc;
-          _state3.default.pieceToMove.showRange();
-        }
-      });
-    } else {
-      if (_state3.default.pieceToMove) {
-        _pieces2.default.findById(_state3.default.pieceToMove.id).moveTo(mousePos, function (err) {
-          if (!err) {
-            _state3.default.pieceToMove = null;
-          } else {
-            console.error(err);
-          }
-        });
-      }
-    }
-  }
-
-  _state3.default.currentMousePosition = Object.assign({}, mousePos);
-
-  _state3.default.drawStart = Object.assign({}, _state3.default.currentMousePosition);
-  _state3.default.lastDistance = 0;
-  _state3.default.shotStart = new Date();
+_board2.default.on('render', function () {
+  return socket.emit('state', _pieces2.default.getAll());
 });
-
-var socket = io(window.location.origin);
-
-_board3.default.on('render', function () {
-  socket.emit('state', _pieces2.default.getAll());
-});
-_board3.default.on('clear', function () {
-  return socket.emit('clear');
-});
-_board3.default.on('shoot', function (shot) {
+_board2.default.on('shoot', function (shot) {
   return socket.emit('shoot', shot);
 });
-_board3.default.on('showRange', function (id) {
+_board2.default.on('showRange', function (id) {
   return socket.emit('showRange', id);
 });
-_board3.default.on('mousemove', function (pos) {
+_board2.default.on('mousemove', function (pos) {
   return socket.emit('mousemove', pos);
 });
 
-_board3.default.on('explode', function (id) {
-  return socket.emit('explode', id);
-});
-_board3.default.on('gameover', function (team) {
-  return socket.emit('gameover', team);
-});
+socket.on('gameover', _boardEvents.gameover);
 
-socket.on('gameover', function (team) {
-  if (_player2.default.getTeam() === team) {
-    alert('You lose');
-  } else {
-    alert('You win');
-  }
-});
-
-socket.on('draw', function (_board) {
-  return _board3.default.draw.apply(_board3.default, _toConsumableArray(Object.values(_board)));
-});
 socket.on('shoot', function (shot) {
-  return _board3.default.drawShot(shot);
+  return _board2.default.drawShot(shot);
 });
-socket.on('explode', function (id) {
-  _pieces2.default.getAll().forEach(function (pc) {
-    if (pc.id === id) {
-      console.log(pc);
-      pc.isHit(true);
-    }
-  });
+socket.on('explode', _boardEvents.explodePiece);
+
+var gamestatus = document.getElementById('gamestatus');
+
+socket.on('countdown', function (countdown) {
+  gamestatus.innerText = 'Game starting in ' + countdown;
 });
 
 socket.on('mousemove', function (pos) {
-  othermouse.style.top = pos.y - 7 + 'px';
-  othermouse.style.left = pos.x - 7 + 'px';
+  othermouse.style.top = pos.y - 15 + 'px';
+  othermouse.style.left = pos.x - 15 + 'px';
 });
 
 socket.on('showRange', function (id) {
@@ -786,11 +685,10 @@ socket.on('seed', function (_state) {
   delete _state.playerTeam;
   Object.assign(_state3.default, _state);
   _pieces2.default.setPieces(_state3.default.pieces);
-  _board3.default.render();
+  _board2.default.render();
 });
 
 socket.on('playerHere', function (playerHere) {
-  console.log(playerHere);
   if (playerHere) {
     socket.emit('requestState');
     _state3.default.playerTeam = 'red';
@@ -801,7 +699,7 @@ socket.on('playerHere', function (playerHere) {
     };
     _pieces2.default.setPieces([{ id: 1, type: 'tank', team: 'green', x: random(900), y: random(600) }, { id: 2, type: 'drone', team: 'green', x: random(900), y: random(600) }, { id: 3, type: 'tank', team: 'red', x: random(900), y: random(600) }, { id: 4, type: 'drone', team: 'red', x: random(900), y: random(600) }, { id: 5, type: 'tank', team: 'green', x: random(900), y: random(600) }, { id: 6, type: 'drone', team: 'green', x: random(900), y: random(600) }, { id: 7, type: 'tank', team: 'red', x: random(900), y: random(600) }, { id: 8, type: 'drone', team: 'red', x: random(900), y: random(600) }]);
 
-    _board3.default.render(true);
+    _board2.default.render(true);
   }
 });
 
@@ -810,33 +708,169 @@ socket.on('state', function (_state) {
   // state.pieces = state.pieces.map( js => new Piece( js.id, js.type, js.team, { x: js.x, y: js.y }, js.health ) );
   _pieces2.default.moveAllTo(_state);
   _state3.default.action = 'shooting';
-  _board3.default.render(true);
+  _board2.default.render(true);
 });
 
-socket.on('clear', _board3.default.clear);
+socket.on('clear', _board2.default.clear);
 
 socket.on('team', function (team) {
-  console.log('team', team);
+
   if (team) {
     _state3.default.playerTeam = team;
     _player2.default.setTeam(team);
   }
+
+  _canvasEvents2.default.style.display = 'block';
+  if (document.querySelector('#jumbo')) {
+    document.body.removeChild(document.getElementById('jumbo'));
+  }
 });
 
-// let numTracker = (function() {
-//   var div = document.getElementById('userCount');
-//   return num => {
-//       div.innerText = num !== 1 ? `${num} users` : `1 user`;
-//       div.style.fontWeight = 'bold';
-//       div.style.color = 'red';
-//       setTimeout(function() {
-//         div.style.fontWeight = 'initial';
-//         div.style.color = 'initial';
-//       }, 750);
-//     };
-// })();
+socket.on('usercount', function () {
+  return console.log('usercount');
+});
 
-// socket.on('usercount', numTracker);
+/***/ }),
+/* 9 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.explodePiece = exports.gameover = undefined;
+
+var _player = __webpack_require__(3);
+
+var _player2 = _interopRequireDefault(_player);
+
+var _pieces = __webpack_require__(2);
+
+var _pieces2 = _interopRequireDefault(_pieces);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var gameover = exports.gameover = function gameover(team) {
+  if (_player2.default.getTeam() === team) {
+    alert('You lose');
+    var gameStats = JSON.parse(localStorage.getItem('gameStats'));
+    gameStats.gamesPlayed++;
+    gameStats.gamesLost++;
+    localStorage.setItem('gameStats', JSON.stringify(gameStats));
+  } else {
+    alert('You win');
+    var _gameStats = JSON.parse(localStorage.getItem('gameStats'));
+    _gameStats.gamesPlayed++;
+    _gameStats.gamesWon++;
+    localStorage.setItem('gameStats', JSON.stringify(_gameStats));
+  }
+};
+
+var explodePiece = exports.explodePiece = function explodePiece(id) {
+  _pieces2.default.getAll().forEach(function (pc) {
+    if (pc.id === id) {
+      console.log(pc);
+      pc.isHit(true);
+    }
+  });
+};
+
+/***/ }),
+/* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _canvas = __webpack_require__(1);
+
+var _state = __webpack_require__(0);
+
+var _state2 = _interopRequireDefault(_state);
+
+var _board = __webpack_require__(5);
+
+var _board2 = _interopRequireDefault(_board);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+_canvas.canvas.addEventListener('mouseup', function () {
+  _state2.default.shooting = false;
+});
+
+_canvas.canvas.addEventListener('mousemove', function (ev) {
+  var mousePos = {
+    x: ev.pageX - this.offsetLeft,
+    y: ev.pageY - this.offsetTop
+  };
+
+  _board2.default.emit('mousemove', mousePos);
+
+  if (_state2.default.shooting) {
+    _state2.default.lastMousePosition = Object.assign({}, _state2.default.currentMousePosition);
+    _state2.default.currentMousePosition = mousePos;
+
+    _board2.default.shoot(_state2.default.lastMousePosition, _state2.default.currentMousePosition, pieces.getAll());
+  } else {
+    // pieces.forEach( pc => {
+    //   if ( distance( pc, mousePos ) < 30 ) {
+    //     placeScope( pc );
+    //   }
+    // } );
+  }
+});
+
+_canvas.canvas.addEventListener('mousedown', function (ev) {
+  _state2.default.shot = [];
+  var mousePos = {
+    x: ev.pageX - this.offsetLeft,
+    y: ev.pageY - this.offsetTop
+  };
+  if (_state2.default.action === 'shooting') {
+    _state2.default.shotCanHit = true;
+    pieces.getAll().forEach(function (pc) {
+      if (pc.mouseOn(mousePos)) {
+        _state2.default.shooting = true;
+      }
+    });
+  }
+
+  if (_state2.default.action === 'moving') {
+    _state2.default.moving = true;
+    if (!_state2.default.pieceToMove) {
+      pieces.getAll().forEach(function (pc) {
+        if (pc.mouseOn(mousePos)) {
+          _state2.default.pieceToMove = pc;
+          _state2.default.pieceToMove.showRange();
+        }
+      });
+    } else {
+      if (_state2.default.pieceToMove) {
+        pieces.findById(_state2.default.pieceToMove.id).moveTo(mousePos, function (err) {
+          if (!err) {
+            _state2.default.pieceToMove = null;
+          } else {
+            console.error(err);
+          }
+        });
+      }
+    }
+  }
+
+  _state2.default.currentMousePosition = Object.assign({}, mousePos);
+
+  _state2.default.drawStart = Object.assign({}, _state2.default.currentMousePosition);
+  _state2.default.lastDistance = 0;
+  _state2.default.shotStart = new Date();
+});
+
+exports.default = _canvas.canvas;
 
 /***/ })
 /******/ ]);
