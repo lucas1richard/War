@@ -10,7 +10,7 @@ app.use( '/img', express.static( path.join( __dirname, '..', 'public', 'img' ) )
 app.use( '/sound', express.static( path.join( __dirname, '..', 'public', 'sound' ) ) );
 app.use( '/js', express.static( path.join( __dirname, '..', 'public', 'js' ) ) );
 
-const server = app.listen( 3000, () => console.log( `Listening on port 3000` ) );
+const server = app.listen( process.env.PORT, () => console.log( `Listening on port ${process.env.PORT}` ) );
 
 const io = socketio.listen(server);
 
