@@ -5,82 +5,95 @@
   <title>War</title>
   <link rel="stylesheet" type="text/css" href="/vendor/bootstrap/dist/css/bootstrap.min.css">
   <style>
-  canvas.shooting {
-    cursor: crosshair;
-  }
+    canvas.shooting {
+      cursor: crosshair;
+    }
 
-  canvas.moving {
-    cursor: move;
-  }
+    canvas.moving {
+      cursor: move;
+    }
 
-  div#othermouse {
-    position: absolute;
-    width: 30px;
-    height: 30px;
-    background-image: url(/img/crsr.png);
-    opacity: 1;
-    background-size: 30px 30px;
-    z-index: 10;
-  }
+    div#othermouse {
+      position: absolute;
+      width: 30px;
+      height: 30px;
+      background-image: url(/img/crsr.png);
+      opacity: 1;
+      background-size: 30px 30px;
+      z-index: 10;
+    }
 
-  footer {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 15px;
-    font-size: 15px;
-    padding-bottom: 15px;
-    text-align: center;
-  }
+    footer {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 15px;
+      font-size: 15px;
+      padding-bottom: 15px;
+      text-align: center;
+    }
 
-  #jumbo {
-    width: 900px;
-    height: 600px;
-    padding-top: 150px;
-    top: 0;
-    text-align: center;
-    left: 0;
-    background-color: lightgray;
-  }
+    #jumbo {
+      width: 900px;
+      height: 600px;
+      padding-top: 150px;
+      top: 0;
+      text-align: center;
+      left: 0;
+      background-color: lightgray;
+    }
 
-  .noselect {
-    -webkit-touch-callout: none; /* iOS Safari */
-      -webkit-user-select: none; /* Safari */
-       -khtml-user-select: none; /* Konqueror HTML */
-         -moz-user-select: none; /* Firefox */
-          -ms-user-select: none; /* Internet Explorer/Edge */
-              user-select: none; /* Non-prefixed version, currently
+    .noselect {
+      -webkit-touch-callout: none;
+      /* iOS Safari */
+      -webkit-user-select: none;
+      /* Safari */
+      -khtml-user-select: none;
+      /* Konqueror HTML */
+      -moz-user-select: none;
+      /* Firefox */
+      -ms-user-select: none;
+      /* Internet Explorer/Edge */
+      user-select: none;
+      /* Non-prefixed version, currently
                                     supported by Chrome and Opera */
-  }
-  .modal {
-    display: block;
-    z-index: 50;
-  }
-  .modal.hide {
-    display: none;
-  }
+    }
 
-  canvas#viewport {
-    width: 900px;
-    display:none;
-    height: 600px;
-    border: 1px solid black;
-    position: absolute;
-    left: 0;
-    top: 0;
-  }
+    .modal {
+      display: block;
+      z-index: 50;
+    }
 
-  #footer {
-    top: 615px;
-    position: absolute;
-    left:15px;
-  }
+    .modal.hide {
+      display: none;
+    }
+
+    canvas#viewport {
+      width: 900px;
+      display: none;
+      height: 600px;
+      border: 1px solid black;
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+
+    #footer {
+      top: 615px;
+      position: absolute;
+      left: 15px;
+    }
+
   </style>
   <script type="text/javascript" src="socket.io/socket.io.js"></script>
 </head>
 
 <body>
+  <h4>Use a mouse for this game</h4>
+  <p>Shoot by clicking on one of your pieces and quickly dragging your mouse to an enemy piece</p>
+  <p>Toggle between shooting and moving by pressing the spacebar</p>
+  <p>Move by clicking one of your pieces and then clicking within the blue circle</p>
   <canvas id="viewport" width="900" height="600" class="shooting"></canvas>
   <div id="footer" class="noselect"></div>
   <div id="othermouse" style="top: 45px; left: 60px;"></div>
@@ -88,16 +101,16 @@
     <h1 id="gamestatus">Waiting for another player</h1>
   </div>
   <div id="my-modal" class="modal fade in hide">
-      <div class="modal-dialog">
-          <div class="modal-content">
-              <div class="modal-header text-center" id="messageHeader">
-                  <h4 class="modal-title text-primary">Game Over</h4>
-              </div>
-              <div class="modal-body text-center text-danger">
-                  <h3 id="messageContent" class="text-danger">You Won!</h3>
-              </div>
-          </div>
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header text-center" id="messageHeader">
+          <h4 class="modal-title text-primary">Game Over</h4>
+        </div>
+        <div class="modal-body text-center text-danger">
+          <h3 id="messageContent" class="text-danger">You Won!</h3>
+        </div>
       </div>
+    </div>
   </div>
 
   <!-- <div class="modal-backdrop fade in"></div> -->
