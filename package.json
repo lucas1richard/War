@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "webpack": "./node_modules/webpack/bin/webpack.js",
-    "start": "npm run webpack -- -w & node ./server/index.js"
+    "start": "node ./server/index.js",
+    "postinstall": "npm run webpack"
   },
   "keywords": [],
   "author": "",
