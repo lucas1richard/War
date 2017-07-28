@@ -1,4 +1,4 @@
-export const distance = ( _start, _end ) => Math.sqrt( Math.pow( _end.x - _start.x, 2 ) + Math.pow( _end.y - _start.y, 2 ) );
+export const distance = (_start, _end) => Math.sqrt(Math.pow(_end.x - _start.x, 2) + Math.pow(_end.y - _start.y, 2));
 
 const droneRedImg = new Image();
 droneRedImg.src = '/img/drone-red.png';
@@ -28,3 +28,4 @@ export const pieceOptions = {
   'tank-red': tankRedImg,
   explosion: explosionImg
 };
+

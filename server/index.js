@@ -7,6 +7,7 @@ require('events').EventEmitter.prototype._maxListeners = 100;
 
 app.use( '/vendor', express.static( path.join( __dirname, '..', 'node_modules' ) ) );
 app.use( '/img', express.static( path.join( __dirname, '..', 'public', 'img' ) ) );
+app.use( '/sound', express.static( path.join( __dirname, '..', 'public', 'sound' ) ) );
 app.use( '/js', express.static( path.join( __dirname, '..', 'public', 'js' ) ) );
 
 const server = app.listen( 3000, () => console.log( `Listening on port 3000` ) );

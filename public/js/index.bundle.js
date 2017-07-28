@@ -63,11 +63,12 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 11);
+/******/ 	return __webpack_require__(__webpack_require__.s = 29);
 /******/ })
 /************************************************************************/
 /******/ ([
-/* 0 */
+/* 0 */,
+/* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -77,15 +78,15 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _state = __webpack_require__(1);
+var _state = __webpack_require__(2);
 
 var _state2 = _interopRequireDefault(_state);
 
-var _Piece = __webpack_require__(9);
+var _Piece = __webpack_require__(27);
 
 var _Piece2 = _interopRequireDefault(_Piece);
 
-var _player = __webpack_require__(3);
+var _player = __webpack_require__(5);
 
 var _player2 = _interopRequireDefault(_player);
 
@@ -147,7 +148,7 @@ var pieces = {
 exports.default = pieces;
 
 /***/ }),
-/* 1 */
+/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -176,7 +177,8 @@ var state = {
 exports.default = state;
 
 /***/ }),
-/* 2 */
+/* 3 */,
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -189,7 +191,7 @@ var canvas = exports.canvas = document.getElementById('viewport');
 var context = exports.context = canvas.getContext('2d');
 
 /***/ }),
-/* 3 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -198,29 +200,31 @@ var context = exports.context = canvas.getContext('2d');
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-window.player = {
-  team: null,
-  getTeam: function getTeam() {
-    return this.team;
-  },
-  setTeam: function setTeam(team) {
-    if (!this.team) {
-      this.team = team;
-      var footer = document.getElementById('footer');
-      footer.innerText = team.charAt(0).toUpperCase() + team.slice(1) + ' Team';
-      footer.style.color = team;
-      footer.style.fontWeight = 'bold';
-      return this.team;
-    } else {
-      console.error('Team is already set to ' + this.team);
+var player = function () {
+  var team = null;
+  return {
+    getTeam: function getTeam() {
+      return team;
+    },
+    setTeam: function setTeam(_team) {
+      if (!team) {
+        team = _team;
+        var footer = document.getElementById('footer');
+        footer.innerText = team.charAt(0).toUpperCase() + team.slice(1) + ' Team';
+        footer.style.color = team;
+        footer.style.fontWeight = 'bold';
+        return this.team;
+      } else {
+        console.error('Team is already set to ' + this.team);
+      }
     }
-  }
-};
+  };
+}();
 
-exports.default = window.player;
+exports.default = player;
 
 /***/ }),
-/* 4 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -230,19 +234,19 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _EventEmitter = __webpack_require__(8);
+var _EventEmitter = __webpack_require__(26);
 
 var _EventEmitter2 = _interopRequireDefault(_EventEmitter);
 
-var _state = __webpack_require__(1);
+var _state = __webpack_require__(2);
 
 var _state2 = _interopRequireDefault(_state);
 
-var _utils = __webpack_require__(5);
+var _utils = __webpack_require__(7);
 
-var _canvas = __webpack_require__(2);
+var _canvas = __webpack_require__(4);
 
-var _pieces = __webpack_require__(0);
+var _pieces = __webpack_require__(1);
 
 var _pieces2 = _interopRequireDefault(_pieces);
 
@@ -313,6 +317,7 @@ board.shoot = function (start, end, targets, shouldBroadcast) {
     return !(start.x > target.x + pieceSize && end.x > target.x + pieceSize || start.x < target.x && end.x < target.x || start.y > target.y + pieceSize && end.y > target.y + pieceSize || start.y < target.y && end.y < target.y);
   }
 };
+
 board.drawShot = function (shot) {
   _canvas.context.beginPath();
   _canvas.context.strokeStyle = shot.strokeStyle;
@@ -325,7 +330,7 @@ board.drawShot = function (shot) {
 exports.default = board;
 
 /***/ }),
-/* 5 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -368,7 +373,51 @@ var pieceOptions = exports.pieceOptions = {
 };
 
 /***/ }),
-/* 6 */
+/* 8 */,
+/* 9 */,
+/* 10 */,
+/* 11 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+function Sound(src) {
+  var _this = this;
+
+  this.sound = document.createElement('audio');
+  this.sound.src = src;
+  this.sound.setAttribute('preload', 'auto');
+  this.sound.setAttribute('controls', 'none');
+  this.sound.style.display = 'none';
+  document.body.appendChild(this.sound);
+  this.play = function () {
+    _this.sound.currentTime = 0;
+    _this.sound.play();
+  };
+  this.stop = function () {
+    _this.sound.pause();
+  };
+}
+
+exports.default = Sound;
+
+/***/ }),
+/* 12 */,
+/* 13 */,
+/* 14 */,
+/* 15 */,
+/* 16 */,
+/* 17 */,
+/* 18 */,
+/* 19 */,
+/* 20 */,
+/* 21 */,
+/* 22 */,
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -379,32 +428,39 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.explodePiece = exports.gameover = undefined;
 
-var _player = __webpack_require__(3);
+var _player = __webpack_require__(5);
 
 var _player2 = _interopRequireDefault(_player);
 
-var _pieces = __webpack_require__(0);
+var _pieces = __webpack_require__(1);
 
 var _pieces2 = _interopRequireDefault(_pieces);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+var messageHeader = document.getElementById('messageHeader');
+var messageContent = document.getElementById('messageContent');
+var modal = document.getElementById('my-modal');
+
 var gameover = exports.gameover = function gameover(team) {
+  var gameStats = JSON.parse(localStorage.getItem('gameStats'));
+  gameStats.gamesPlayed++;
+  modal.className = 'modal fade in';
   if (_player2.default.getTeam() === team) {
-    alert('You lose');
-    var gameStats = JSON.parse(localStorage.getItem('gameStats'));
-    gameStats.gamesPlayed++;
+    messageHeader.innerHTML = '<h4 class="modal-title text-primary">Game Over</h4>';
+    messageContent.innerHTML = 'You lost';
+    messageContent.className = 'text-danger';
     gameStats.gamesLost++;
-    localStorage.setItem('gameStats', JSON.stringify(gameStats));
-    window.location.href = window.location.origin;
   } else {
-    alert('You win');
-    var _gameStats = JSON.parse(localStorage.getItem('gameStats'));
-    _gameStats.gamesPlayed++;
-    _gameStats.gamesWon++;
-    localStorage.setItem('gameStats', JSON.stringify(_gameStats));
-    window.location.href = window.location.origin;
+    messageHeader.innerHTML = '<h4 class="modal-title text-primary">Game Over</h4>';
+    messageContent.innerHTML = 'You Win!';
+    messageContent.className = 'text-success';
+    gameStats.gamesWon++;
   }
+  localStorage.setItem('gameStats', JSON.stringify(gameStats));
+  setTimeout(function () {
+    window.location.href = window.location.origin;
+  }, 2000);
 };
 
 var explodePiece = exports.explodePiece = function explodePiece(id) {
@@ -416,7 +472,7 @@ var explodePiece = exports.explodePiece = function explodePiece(id) {
 };
 
 /***/ }),
-/* 7 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -426,21 +482,27 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _canvas = __webpack_require__(2);
+var _canvas = __webpack_require__(4);
 
-var _state = __webpack_require__(1);
+var _state = __webpack_require__(2);
 
 var _state2 = _interopRequireDefault(_state);
 
-var _board = __webpack_require__(4);
+var _board = __webpack_require__(6);
 
 var _board2 = _interopRequireDefault(_board);
 
-var _pieces = __webpack_require__(0);
+var _pieces = __webpack_require__(1);
 
 var _pieces2 = _interopRequireDefault(_pieces);
 
+var _Sound = __webpack_require__(11);
+
+var _Sound2 = _interopRequireDefault(_Sound);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var shot = new _Sound2.default('/sound/shot.mp3');
 
 _canvas.canvas.addEventListener('mouseup', function () {
   _state2.default.shooting = false;
@@ -472,6 +534,7 @@ _canvas.canvas.addEventListener('mousedown', function (ev) {
     _state2.default.shotCanHit = true;
     _pieces2.default.getAll().forEach(function (pc) {
       if (pc.mouseOn(mousePos)) {
+        shot.play();
         _state2.default.shooting = true;
       }
     });
@@ -509,7 +572,8 @@ _canvas.canvas.addEventListener('mousedown', function (ev) {
 exports.default = _canvas.canvas;
 
 /***/ }),
-/* 8 */
+/* 25 */,
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -556,7 +620,7 @@ var EventEmitter = function () {
 exports.default = EventEmitter;
 
 /***/ }),
-/* 9 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -568,29 +632,35 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _state = __webpack_require__(1);
+var _state = __webpack_require__(2);
 
 var _state2 = _interopRequireDefault(_state);
 
-var _utils = __webpack_require__(5);
+var _utils = __webpack_require__(7);
 
-var _canvas = __webpack_require__(2);
+var _canvas = __webpack_require__(4);
 
-var _board = __webpack_require__(4);
+var _board = __webpack_require__(6);
 
 var _board2 = _interopRequireDefault(_board);
 
-var _player = __webpack_require__(3);
+var _player = __webpack_require__(5);
 
 var _player2 = _interopRequireDefault(_player);
 
-var _pieces = __webpack_require__(0);
+var _pieces = __webpack_require__(1);
 
 var _pieces2 = _interopRequireDefault(_pieces);
+
+var _Sound = __webpack_require__(11);
+
+var _Sound2 = _interopRequireDefault(_Sound);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var explosion = new _Sound2.default('/sound/explosion.mp3');
 
 var pieceSize = _state2.default.pieceSize;
 
@@ -653,6 +723,7 @@ var Piece = function () {
       this.isExploding = true;
       this.icon = _utils.explosionImg;
       this.render();
+      explosion.play();
       setTimeout(function () {
         _this.icon = _utils.pieceOptions[_this.type + '-' + _this.team];
         if (_this.health) {
@@ -713,36 +784,36 @@ var Piece = function () {
 exports.default = Piece;
 
 /***/ }),
-/* 10 */,
-/* 11 */
+/* 28 */,
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _state2 = __webpack_require__(1);
+var _state2 = __webpack_require__(2);
 
 var _state3 = _interopRequireDefault(_state2);
 
-var _utils = __webpack_require__(5);
+var _utils = __webpack_require__(7);
 
-var _board = __webpack_require__(4);
+var _board = __webpack_require__(6);
 
 var _board2 = _interopRequireDefault(_board);
 
-var _player = __webpack_require__(3);
+var _player = __webpack_require__(5);
 
 var _player2 = _interopRequireDefault(_player);
 
-var _pieces = __webpack_require__(0);
+var _pieces = __webpack_require__(1);
 
 var _pieces2 = _interopRequireDefault(_pieces);
 
-var _canvas = __webpack_require__(2);
+var _canvas = __webpack_require__(4);
 
-var _boardEvents = __webpack_require__(6);
+var _boardEvents = __webpack_require__(23);
 
-var _canvasEvents = __webpack_require__(7);
+var _canvasEvents = __webpack_require__(24);
 
 var _canvasEvents2 = _interopRequireDefault(_canvasEvents);
 
@@ -750,6 +821,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 window.addEventListener('keydown', btnPress, false);
 var gamestatus = document.getElementById('gamestatus');
+var messageHeader = document.getElementById('messageHeader');
+var messageContent = document.getElementById('messageContent');
+var modal = document.getElementById('my-modal');
 
 var othermouse = document.getElementById('othermouse');
 
@@ -818,7 +892,13 @@ socket.on('showRange', function (id) {
   });
 });
 socket.on('disconnected', function () {
-  alert('It looks like the other player got disconnected');
+  messageHeader.innerHTML = '<h4 class="modal-title text-primary">Update</h4>';
+  messageContent.innerHTML = 'It looks like the other player got disconnected';
+  messageContent.className = 'text-danger';
+  modal.className = 'modal fade in';
+  setTimeout(function () {
+    window.location.href = window.location.origin;
+  }, 2000);
 });
 
 socket.on('seed', function (_state) {
@@ -847,6 +927,11 @@ socket.on('state', function (_state) {
   _pieces2.default.moveAllTo(_state);
   _state3.default.action = 'shooting';
   _board2.default.render(true);
+});
+
+socket.on('game_is_full', function () {
+  alert('This game is already full');
+  window.location.href = window.location.origin;
 });
 
 socket.on('clear', _board2.default.clear);

@@ -38,7 +38,6 @@
     width: 900px;
     height: 600px;
     padding-top: 150px;
-    position: absolute;
     top: 0;
     text-align: center;
     left: 0;
@@ -54,6 +53,13 @@
               user-select: none; /* Non-prefixed version, currently
                                     supported by Chrome and Opera */
   }
+  .modal {
+    display: block;
+    z-index: 50;
+  }
+  .modal.hide {
+    display: none;
+  }
 
   canvas#viewport {
     width: 900px;
@@ -64,17 +70,37 @@
     left: 0;
     top: 0;
   }
+
+  #footer {
+    top: 615px;
+    position: absolute;
+    left:15px;
+  }
   </style>
   <script type="text/javascript" src="socket.io/socket.io.js"></script>
 </head>
 
 <body>
   <canvas id="viewport" width="900" height="600" class="shooting"></canvas>
+  <div id="footer" class="noselect"></div>
   <div id="othermouse" style="top: 45px; left: 60px;"></div>
-  <footer id="footer" class="noselect"></footer>
   <div style="z-index: 2000;" id="jumbo" class="noselect">
     <h1 id="gamestatus">Waiting for another player</h1>
   </div>
+  <div id="my-modal" class="modal fade in hide">
+      <div class="modal-dialog">
+          <div class="modal-content">
+              <div class="modal-header text-center" id="messageHeader">
+                  <h4 class="modal-title text-primary">Game Over</h4>
+              </div>
+              <div class="modal-body text-center text-danger">
+                  <h3 id="messageContent" class="text-danger">You Won!</h3>
+              </div>
+          </div>
+      </div>
+  </div>
+
+  <!-- <div class="modal-backdrop fade in"></div> -->
 </body>
 <script src="js/index.bundle.js"></script>
 

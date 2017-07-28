@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "webpack": "./node_modules/webpack/bin/webpack.js",
-    "start": "npm run webpack -- -w & nodemon --ignore public/ --ignore src/ --ignore client/ ./server/index.js"
+    "start": "npm run webpack -- -w & node ./server/index.js"
   },
   "keywords": [],
   "author": "",
