@@ -8,6 +8,23 @@ import pieces from './pieces';
 import { context } from './canvas';
 import { gameover, explodePiece } from './boardEvents';
 import canvas from './canvasEvents';
+import {
+  CLEAR,
+  COUNT_DOWN,
+  DISCONNECTED,
+  EXPLODE,
+  GAME_IS_FULL,
+  GAME_OVER,
+  MOUSE_MOVE,
+  PLAYER_HERE,
+  RENDER,
+  REQUEST_STATE,
+  SEED,
+  SHOW_RANGE,
+  SHOOT,
+  STATE as _STATE,
+  TEAM,
+} from '../constants';
 
 window.addEventListener('keydown', btnPress, false);
 const gamestatus = document.getElementById('gamestatus');
@@ -19,11 +36,11 @@ const othermouse = document.getElementById('othermouse');
 
 function btnPress(ev) {
   if (ev.keyCode === 32) {
-    if (canvas.className === 'shooting') {
-      canvas.className = 'moving';
+    if (canvas.className === 'shooting noselect') {
+      canvas.className = 'moving noselect';
       state.action = 'moving';
     } else {
-      canvas.className = 'shooting';
+      canvas.className = 'shooting noselect';
       state.action = 'shooting';
     }
   }
@@ -46,30 +63,30 @@ if (gameStats) {
 
 let socket = io(window.location.href);
 
-board.on('explode', id => socket.emit('explode', id));
-board.on('gameover', team => socket.emit('gameover', team));
-board.on('render', () => socket.emit('state', pieces.getAll()));
-board.on('shoot', (shot) => socket.emit('shoot', shot));
-board.on('showRange', id => socket.emit('showRange', id));
-board.on('mousemove', pos => socket.emit('mousemove', pos));
+board.on(EXPLODE, id => socket.emit(EXPLODE, id));
+board.on(GAME_OVER, team => socket.emit(GAME_OVER, team));
+board.on(RENDER, () => socket.emit(_STATE, pieces.getAll()));
+board.on(SHOOT, (shot) => socket.emit(SHOOT, shot));
+board.on(SHOW_RANGE, id => socket.emit(SHOW_RANGE, id));
+board.on('mousemove', pos => socket.emit(MOUSE_MOVE, pos));
 
-socket.on('gameover', gameover);
-socket.on('shoot', shot => board.drawShot(shot));
-socket.on('explode', explodePiece);
-socket.on('countdown', countdown => {
+socket.on(GAME_OVER, gameover);
+socket.on(SHOOT, shot => board.drawShot(shot));
+socket.on(EXPLODE, explodePiece);
+socket.on(COUNT_DOWN, countdown => {
   gamestatus.innerHTML = `Game starting in<br/>${countdown}`;
 });
 
-socket.on('mousemove', pos => {
+socket.on(MOUSE_MOVE, pos => {
   othermouse.style.top = `${pos.y - 15}px`;
   othermouse.style.left = `${pos.x - 15}px`;
 });
-socket.on('showRange', id => {
+socket.on(SHOW_RANGE, id => {
   pieces.getAll().forEach(pc => {
     if (pc.id === id) pc.showRange();
   });
 });
-socket.on('disconnected', () => {
+socket.on(DISCONNECTED, () => {
   messageHeader.innerHTML = `<h4 class="modal-title text-primary">Update</h4>`;
   messageContent.innerHTML = `It looks like the other player got disconnected`;
   messageContent.className = 'text-danger';
@@ -79,16 +96,16 @@ socket.on('disconnected', () => {
   }, 2000);
 });
 
-socket.on('seed', _state => {
+socket.on(SEED, _state => {
   delete _state.playerTeam;
   Object.assign(state, _state);
   pieces.setPieces(state.pieces);
   board.render();
 });
 
-socket.on('playerHere', playerHere => {
+socket.on(PLAYER_HERE, playerHere => {
   if (playerHere) {
-    socket.emit('requestState');
+    socket.emit(REQUEST_STATE);
     state.playerTeam = 'red';
   } else {
     context.drawImage(sandImg, 0, 0, 900, 600);
@@ -108,20 +125,20 @@ socket.on('playerHere', playerHere => {
   }
 });
 
-socket.on('state', _state => {
+socket.on(_STATE, _state => {
   pieces.moveAllTo(_state);
   state.action = 'shooting';
   board.render(true);
 });
 
-socket.on('game_is_full', () => {
+socket.on(GAME_IS_FULL, () => {
   alert('This game is already full');
   window.location.href = window.location.origin;
 });
 
-socket.on('clear', board.clear);
+socket.on(CLEAR, board.clear);
 
-socket.on('team', team => {
+socket.on(TEAM, team => {
 
   if (team) {
     state.playerTeam = team;

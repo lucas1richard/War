@@ -2,6 +2,8 @@ const express = require('express');
 const app = express();
 const path = require('path');
 const socketio = require('socket.io');
+const {CONNECTION} = require('../constants');
+
 require('events').EventEmitter.prototype._maxListeners = 100;
 
 app.use('/vendor', express.static(path.join(__dirname, '..', 'node_modules')));
@@ -15,7 +17,7 @@ const io = socketio.listen(server);
 
 app.use('/', require('./routes')(io));
 
-io.on('connection', socket => {
+io.on(CONNECTION, () => {
   io.emit('nsps', Object.keys(io.nsps).filter(nsp => {
     return Object
       .keys(io.nsps[nsp].sockets)

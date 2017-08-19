@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 29);
+/******/ 	return __webpack_require__(__webpack_require__.s = 30);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -82,7 +82,7 @@ var _state = __webpack_require__(2);
 
 var _state2 = _interopRequireDefault(_state);
 
-var _Piece = __webpack_require__(27);
+var _Piece = __webpack_require__(28);
 
 var _Piece2 = _interopRequireDefault(_Piece);
 
@@ -234,7 +234,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _EventEmitter = __webpack_require__(26);
+var _EventEmitter = __webpack_require__(27);
 
 var _EventEmitter2 = _interopRequireDefault(_EventEmitter);
 
@@ -250,6 +250,8 @@ var _pieces = __webpack_require__(1);
 
 var _pieces2 = _interopRequireDefault(_pieces);
 
+var _constants = __webpack_require__(25);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var pieceSize = _state2.default.pieceSize;
@@ -259,7 +261,7 @@ var board = new _EventEmitter2.default();
 
 board.clear = function (shouldBroadcast) {
   _canvas.context.clearRect(0, 0, _canvas.canvas.width, _canvas.canvas.height);
-  if (shouldBroadcast) board.emit('clear');
+  if (shouldBroadcast) board.emit(_constants.CLEAR);
 };
 
 board.render = function (shouldBroadcast) {
@@ -273,7 +275,7 @@ board.render = function (shouldBroadcast) {
   _state2.default.shot.forEach(function (shot) {
     return board.drawShot(shot);
   });
-  if (!shouldBroadcast) board.emit('render', _state2.default);
+  if (!shouldBroadcast) board.emit(_constants.RENDER, _state2.default);
 };
 
 board.shoot = function (start, end, targets, shouldBroadcast) {
@@ -294,7 +296,7 @@ board.shoot = function (start, end, targets, shouldBroadcast) {
 
   _state2.default.shot.push({ start: start, end: end, strokeStyle: 'rgba(1, 1, 0, ' + (1 - dist / 250) + ')' });
 
-  board.emit('shoot', { start: start, end: end, strokeStyle: 'rgba(1, 1, 0, ' + (1 - dist / 250) + ')' });
+  board.emit(_constants.SHOOT, { start: start, end: end, strokeStyle: 'rgba(1, 1, 0, ' + (1 - dist / 250) + ')' });
 
   function hit(target) {
     if (start.x === end.x || start.y === end.y) return false;
@@ -309,8 +311,7 @@ board.shoot = function (start, end, targets, shouldBroadcast) {
     }).length) return true;
     if (corners.filter(function (crn) {
       return crn > 0;
-    }).length === 4) return false;
-    if (corners.filter(function (crn) {
+    }).length === 4 || corners.filter(function (crn) {
       return crn < 0;
     }).length === 4) return false;
 
@@ -572,8 +573,35 @@ _canvas.canvas.addEventListener('mousedown', function (ev) {
 exports.default = _canvas.canvas;
 
 /***/ }),
-/* 25 */,
-/* 26 */
+/* 25 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+module.exports = {
+  CLEAR: 'CLEAR',
+  CONNECTION: 'connection',
+  COUNT_DOWN: 'COUNT_DOWN',
+  DISCONNECT: 'disconnect',
+  DISCONNECTED: 'DISCONNECTED',
+  EXPLODE: 'EXPLODE',
+  GAME_IS_FULL: 'GAME_IS_FULL',
+  GAME_OVER: 'GAME_OVER',
+  MOUSE_MOVE: 'MOUSE_MOVE',
+  PLAYER_HERE: 'PLAYER_HERE',
+  RENDER: 'RENDER',
+  REQUEST_STATE: 'REQUEST_STATE',
+  SEED: 'SEED',
+  SHOOT: 'SHOOT',
+  SHOW_RANGE: 'SHOW_RANGE',
+  STATE: 'STATE',
+  TEAM: 'TEAM'
+};
+
+/***/ }),
+/* 26 */,
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -620,7 +648,7 @@ var EventEmitter = function () {
 exports.default = EventEmitter;
 
 /***/ }),
-/* 27 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -655,6 +683,8 @@ var _pieces2 = _interopRequireDefault(_pieces);
 var _Sound = __webpack_require__(11);
 
 var _Sound2 = _interopRequireDefault(_Sound);
+
+var _constants = __webpack_require__(25);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -711,7 +741,7 @@ var Piece = function () {
         // console.log( `%cHealth reduced to ${this.health}`, 'color: blue; font-weight: bold');
         _state2.default.shotCanHit = false;
         if (!explode) {
-          _board2.default.emit('explode', this.id);
+          _board2.default.emit(_constants.EXPLODE, this.id);
         }
       }
     }
@@ -734,7 +764,7 @@ var Piece = function () {
           _board2.default.render();
         }
         if (!_pieces2.default.checkSurvivors()) {
-          _board2.default.emit('gameover', _player2.default.getTeam());
+          _board2.default.emit(_constants.GAME_OVER, _player2.default.getTeam());
         }
       }, 500);
     }
@@ -784,8 +814,8 @@ var Piece = function () {
 exports.default = Piece;
 
 /***/ }),
-/* 28 */,
-/* 29 */
+/* 29 */,
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -817,6 +847,8 @@ var _canvasEvents = __webpack_require__(24);
 
 var _canvasEvents2 = _interopRequireDefault(_canvasEvents);
 
+var _constants = __webpack_require__(25);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 window.addEventListener('keydown', btnPress, false);
@@ -829,11 +861,11 @@ var othermouse = document.getElementById('othermouse');
 
 function btnPress(ev) {
   if (ev.keyCode === 32) {
-    if (_canvasEvents2.default.className === 'shooting') {
-      _canvasEvents2.default.className = 'moving';
+    if (_canvasEvents2.default.className === 'shooting noselect') {
+      _canvasEvents2.default.className = 'moving noselect';
       _state3.default.action = 'moving';
     } else {
-      _canvasEvents2.default.className = 'shooting';
+      _canvasEvents2.default.className = 'shooting noselect';
       _state3.default.action = 'shooting';
     }
   }
@@ -855,43 +887,44 @@ if (gameStats) {
 
 var socket = io(window.location.href);
 
-_board2.default.on('explode', function (id) {
-  return socket.emit('explode', id);
+_board2.default.on(_constants.EXPLODE, function (id) {
+  return socket.emit(_constants.EXPLODE, id);
 });
-_board2.default.on('gameover', function (team) {
-  return socket.emit('gameover', team);
+_board2.default.on(_constants.GAME_OVER, function (team) {
+  return socket.emit(_constants.GAME_OVER, team);
 });
-_board2.default.on('render', function () {
-  return socket.emit('state', _pieces2.default.getAll());
+_board2.default.on(_constants.RENDER, function () {
+  return socket.emit(_constants.STATE, _pieces2.default.getAll());
 });
-_board2.default.on('shoot', function (shot) {
-  return socket.emit('shoot', shot);
+_board2.default.on(_constants.SHOOT, function (shot) {
+  return socket.emit(_constants.SHOOT, shot);
 });
-_board2.default.on('showRange', function (id) {
-  return socket.emit('showRange', id);
+_board2.default.on(_constants.SHOW_RANGE, function (id) {
+  return socket.emit(_constants.SHOW_RANGE, id);
 });
 _board2.default.on('mousemove', function (pos) {
-  return socket.emit('mousemove', pos);
+  return socket.emit(_constants.MOUSE_MOVE, pos);
 });
 
-socket.on('gameover', _boardEvents.gameover);
-socket.on('shoot', function (shot) {
+socket.on(_constants.GAME_OVER, _boardEvents.gameover);
+socket.on(_constants.SHOOT, function (shot) {
   return _board2.default.drawShot(shot);
 });
-socket.on('explode', _boardEvents.explodePiece);
-socket.on('countdown', function (countdown) {
+socket.on(_constants.EXPLODE, _boardEvents.explodePiece);
+socket.on(_constants.COUNT_DOWN, function (countdown) {
   gamestatus.innerHTML = 'Game starting in<br/>' + countdown;
 });
-socket.on('mousemove', function (pos) {
+
+socket.on(_constants.MOUSE_MOVE, function (pos) {
   othermouse.style.top = pos.y - 15 + 'px';
   othermouse.style.left = pos.x - 15 + 'px';
 });
-socket.on('showRange', function (id) {
+socket.on(_constants.SHOW_RANGE, function (id) {
   _pieces2.default.getAll().forEach(function (pc) {
     if (pc.id === id) pc.showRange();
   });
 });
-socket.on('disconnected', function () {
+socket.on(_constants.DISCONNECTED, function () {
   messageHeader.innerHTML = '<h4 class="modal-title text-primary">Update</h4>';
   messageContent.innerHTML = 'It looks like the other player got disconnected';
   messageContent.className = 'text-danger';
@@ -901,16 +934,16 @@ socket.on('disconnected', function () {
   }, 2000);
 });
 
-socket.on('seed', function (_state) {
+socket.on(_constants.SEED, function (_state) {
   delete _state.playerTeam;
   Object.assign(_state3.default, _state);
   _pieces2.default.setPieces(_state3.default.pieces);
   _board2.default.render();
 });
 
-socket.on('playerHere', function (playerHere) {
+socket.on(_constants.PLAYER_HERE, function (playerHere) {
   if (playerHere) {
-    socket.emit('requestState');
+    socket.emit(_constants.REQUEST_STATE);
     _state3.default.playerTeam = 'red';
   } else {
     _canvas.context.drawImage(_utils.sandImg, 0, 0, 900, 600);
@@ -923,20 +956,20 @@ socket.on('playerHere', function (playerHere) {
   }
 });
 
-socket.on('state', function (_state) {
+socket.on(_constants.STATE, function (_state) {
   _pieces2.default.moveAllTo(_state);
   _state3.default.action = 'shooting';
   _board2.default.render(true);
 });
 
-socket.on('game_is_full', function () {
+socket.on(_constants.GAME_IS_FULL, function () {
   alert('This game is already full');
   window.location.href = window.location.origin;
 });
 
-socket.on('clear', _board2.default.clear);
+socket.on(_constants.CLEAR, _board2.default.clear);
 
-socket.on('team', function (team) {
+socket.on(_constants.TEAM, function (team) {
 
   if (team) {
     _state3.default.playerTeam = team;

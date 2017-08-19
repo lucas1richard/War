@@ -5,6 +5,7 @@ import board from './board';
 import player from './player';
 import pieces from './pieces';
 import Sound from './Sound';
+import {EXPLODE, GAME_OVER} from '../constants';
 
 const explosion = new Sound('/sound/explosion.mp3');
 
@@ -52,7 +53,7 @@ class Piece {
       // console.log( `%cHealth reduced to ${this.health}`, 'color: blue; font-weight: bold');
       state.shotCanHit = false;
       if (!explode) {
-        board.emit('explode', this.id);
+        board.emit(EXPLODE, this.id);
       }
     }
   }
@@ -72,7 +73,7 @@ class Piece {
         board.render();
       }
       if (!pieces.checkSurvivors()) {
-        board.emit('gameover', player.getTeam());
+        board.emit(GAME_OVER, player.getTeam());
       }
     }, 500);
   }

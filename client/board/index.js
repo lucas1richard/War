@@ -4,6 +4,11 @@ import state from '../state';
 import { sandImg, distance } from '../utils';
 import { canvas, context } from '../canvas';
 import pieces from '../pieces';
+import {
+  CLEAR,
+  RENDER,
+  SHOOT,
+} from '../../constants';
 
 let { pieceSize } = state;
 
@@ -11,7 +16,7 @@ const board = new EventEmitter();
 
 board.clear = function (shouldBroadcast) {
   context.clearRect(0, 0, canvas.width, canvas.height);
-  if (shouldBroadcast) board.emit('clear');
+  if (shouldBroadcast) board.emit(CLEAR);
 };
 
 board.render = function (shouldBroadcast) {
@@ -23,7 +28,7 @@ board.render = function (shouldBroadcast) {
   context.restore();
   pieces.renderAll();
   state.shot.forEach(shot => board.drawShot(shot));
-  if (!shouldBroadcast) board.emit('render', state);
+  if (!shouldBroadcast) board.emit(RENDER, state);
 };
 
 board.shoot = function (start, end, targets, shouldBroadcast) {
@@ -44,7 +49,7 @@ board.shoot = function (start, end, targets, shouldBroadcast) {
 
   state.shot.push({ start, end, strokeStyle: `rgba(1, 1, 0, ${1 - (dist) / 250})` });
 
-  board.emit('shoot', { start, end, strokeStyle: `rgba(1, 1, 0, ${1 - (dist) / 250})` });
+  board.emit(SHOOT, { start, end, strokeStyle: `rgba(1, 1, 0, ${1 - (dist) / 250})` });
 
   function hit(target) {
     if (start.x === end.x || start.y === end.y) return false;
@@ -53,8 +58,7 @@ board.shoot = function (start, end, targets, shouldBroadcast) {
 
     let corners = [fn(target.x, target.y), fn(target.x + pieceSize, target.y), fn(target.x, target.y + pieceSize), fn(target.x + pieceSize, target.y + pieceSize)];
     if (corners.filter(crn => crn === 0).length) return true;
-    if (corners.filter(crn => crn > 0).length === 4) return false;
-    if (corners.filter(crn => crn < 0).length === 4) return false;
+    if (corners.filter(crn => crn > 0).length === 4 || corners.filter(crn => crn < 0).length === 4) return false;
 
     return !(
       (start.x > target.x + pieceSize && end.x > target.x + pieceSize) || (start.x < target.x && end.x < target.x) ||
